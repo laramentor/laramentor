@@ -6,6 +6,10 @@
         "new_with_braces": {
             "anonymous_class": false,
             "named_class": false
-        }
+        },
+        "ordered_imports": {
+            "sort_algorithm": "length"
+        },
+        "no_unused_imports":true
     }
 }
