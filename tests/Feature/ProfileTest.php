@@ -1,6 +1,6 @@
 <?php
 
-test('test profile page is displayed', function(){
+test('test profile page is displayed', function () {
 
     $user = \App\Models\User::factory()->create();
 
@@ -11,7 +11,7 @@ test('test profile page is displayed', function(){
     $response->assertOk();
 });
 
-test('test profile information can be updated', function(){
+test('test profile information can be updated', function () {
 
     $user = \App\Models\User::factory()->create();
 
@@ -33,7 +33,7 @@ test('test profile information can be updated', function(){
     $this->assertNull($user->email_verified_at);
 });
 
-test('test email verification status is unchanged when the email address is unchanged', function(){
+test('test email verification status is unchanged when the email address is unchanged', function () {
 
     $user = \App\Models\User::factory()->create();
 
@@ -51,7 +51,7 @@ test('test email verification status is unchanged when the email address is unch
     $this->assertNotNull($user->refresh()->email_verified_at);
 });
 
-test('test user can delete their account', function(){
+test('test user can delete their account', function () {
 
     $user = \App\Models\User::factory()->create();
 
@@ -69,7 +69,7 @@ test('test user can delete their account', function(){
     $this->assertNull($user->fresh());
 });
 
-test('test correct password must be provided to delete account', function(){
+test('test correct password must be provided to delete account', function () {
 
     $user = \App\Models\User::factory()->create();
 
