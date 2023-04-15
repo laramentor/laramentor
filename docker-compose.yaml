@@ -1,0 +1,91 @@
+version: '3.9'
+
+networks:
+  laramentor:
+    driver: "bridge"
+    
+
+# volumes:
+  #  db-data:
+
+services:
+
+#PHP-FPM service
+  app:
+    build: .
+    container_name: laramentor
+    restart: unless-stopped
+    tty: true
+    working_dir: /var/www/laramentor
+    depends_on:
+      - db
+      - redis
+
+    volumes:
+      - ./:/var/www/laramentor
+      - ./docker-files/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+
+    networks:
+      - laramentor
+
+#   #NGINX service
+  laramentor_webserver: 
+    image: nginx
+    container_name: laramentor_webserver
+    restart: unless-stopped
+    # tty: true
+    
+    ports:
+      - '9050:80'
+      - '9051:443'
+    
+    volumes:
+      - ./:/var/www/laramentor
+      - ./docker-files/nginx/conf.d/app.conf:/etc/nginx/conf.d/app.conf
+    
+    networks:
+      - laramentor
+  db:
+    platform: linux/x86_64 #comment this line out if using windows
+    container_name: laramentor_db
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    restart: always
+    # tty: true
+    ports:
+      -  "9052:3306"
+
+    volumes:
+      -  ./storage/dbdata:/var/lib/mysql
+      -  ./docker-files/mysql/mysql.cnf:/etc/mysql/mysql.cnf
+    networks:
+      - laramentor
+
+#setup db management interface
+  adminer:
+    container_name: laramentor_adminer
+    image: adminer:latest
+    restart: always
+    ports:
+      - "9053:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: db
+    networks:
+      - laramentor
+
+
+  redis:
+    container_name: laramentor_redis
+    image: redis:alpine
+    env_file:
+      - .env
+    ports:
+      - "9054:6379"
+    volumes:
+      - ./storage/redis/data:/data
+    networks:
+      - laramentor
