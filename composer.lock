@@ -3524,12 +3524,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laramentor/laravel-google-calendar.git",
-                "reference": "37322a2b0b7705e87a6023e1813098cb9f4fe06f"
+                "reference": "a99eb455580df8c71f930d535bfee5cf752048c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laramentor/laravel-google-calendar/zipball/37322a2b0b7705e87a6023e1813098cb9f4fe06f",
-                "reference": "37322a2b0b7705e87a6023e1813098cb9f4fe06f",
+                "url": "https://api.github.com/repos/laramentor/laravel-google-calendar/zipball/a99eb455580df8c71f930d535bfee5cf752048c2",
+                "reference": "a99eb455580df8c71f930d535bfee5cf752048c2",
                 "shasum": ""
             },
             "require": {
@@ -3599,7 +3599,7 @@
                     "url": "https://spatie.be/open-source/support-us"
                 }
             ],
-            "time": "2023-01-24T23:20:59+00:00"
+            "time": "2023-04-19T11:36:55+00:00"
         },
         {
             "name": "symfony/console",
