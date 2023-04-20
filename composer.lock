@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "93f9366620028993c5d04d0997670727",
+    "content-hash": "ada8151d886390acb732fb9444796da8",
     "packages": [
         {
             "name": "brick/math",
@@ -3520,16 +3520,16 @@
         },
         {
             "name": "spatie/laravel-google-calendar",
-            "version": "dev-add-meet-support",
+            "version": "3.6.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/laramentor/laravel-google-calendar.git",
-                "reference": "a99eb455580df8c71f930d535bfee5cf752048c2"
+                "url": "https://github.com/spatie/laravel-google-calendar.git",
+                "reference": "2c292b0eaa743105643987cd73c1c187d6183784"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laramentor/laravel-google-calendar/zipball/a99eb455580df8c71f930d535bfee5cf752048c2",
-                "reference": "a99eb455580df8c71f930d535bfee5cf752048c2",
+                "url": "https://api.github.com/repos/spatie/laravel-google-calendar/zipball/2c292b0eaa743105643987cd73c1c187d6183784",
+                "reference": "2c292b0eaa743105643987cd73c1c187d6183784",
                 "shasum": ""
             },
             "require": {
@@ -3559,16 +3559,7 @@
                     "Spatie\\GoogleCalendar\\": "src"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Spatie\\GoogleCalendar\\Tests\\": "tests"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "vendor/bin/phpunit"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -3591,15 +3582,15 @@
                 "spatie"
             ],
             "support": {
-                "source": "https://github.com/laramentor/laravel-google-calendar/tree/add-meet-support"
+                "source": "https://github.com/spatie/laravel-google-calendar/tree/3.6.0"
             },
             "funding": [
                 {
-                    "type": "custom",
-                    "url": "https://spatie.be/open-source/support-us"
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
                 }
             ],
-            "time": "2023-04-19T11:36:55+00:00"
+            "time": "2023-04-20T06:44:04+00:00"
         },
         {
             "name": "symfony/console",
@@ -9444,9 +9435,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "spatie/laravel-google-calendar": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

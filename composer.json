@@ -11,8 +11,8 @@
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
-        "tightenco/ziggy": "^1.0",
-        "spatie/laravel-google-calendar": "dev-add-meet-support"
+        "spatie/laravel-google-calendar": "^3.6",
+        "tightenco/ziggy": "^1.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -67,11 +67,5 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true,
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/laramentor/laravel-google-calendar"
-        }
-    ]
+    "prefer-stable": true
 }
