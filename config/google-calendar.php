@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'use_live_api' => env('GOOGLE_CALENDAR_USE_LIVE_API', false),
 
     'default_auth_profile' => env('GOOGLE_CALENDAR_AUTH_PROFILE', 'service_account'),
 
@@ -37,7 +38,7 @@ return [
      */
     'calendar_id' => env('GOOGLE_CALENDAR_ID'),
 
-     /*
+    /*
      *  The email address of the user account to impersonate.
      */
     'user_to_impersonate' => env('GOOGLE_CALENDAR_IMPERSONATE'),
