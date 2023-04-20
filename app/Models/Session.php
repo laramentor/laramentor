@@ -12,6 +12,11 @@ class Session extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'start_date_time' => 'datetime',
+        'end_date_time' => 'datetime',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
