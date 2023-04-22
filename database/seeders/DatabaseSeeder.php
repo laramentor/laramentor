@@ -15,12 +15,22 @@ class DatabaseSeeder extends Seeder
     {
         $this->command->info('You can use the following users (with \'password\') to login to ' . config('app.name'));
 
+        // create 3 users as mentors
+        User::factory()->count(3)->create()
+            ->each(function ($user) {
+                $user->mentor()->create();
+            });
+
         // create user as mentor and output email
-        $mentor = User::factory()->create()->mentor()->create();
+        $mentor = User::factory()->create()
+            ->mentor()->create();
+
         $this->command->info('Mentor: ' . $mentor->user->email);
 
         // create user as mentee and output email
-        $user = User::factory()->create();
-        $this->command->info('Mentee: ' . $user->email);
+        $mentee = User::factory()->create()
+            ->mentee()->create();
+
+        $this->command->info('Mentee: ' . $mentee->user->email);
     }
 }
