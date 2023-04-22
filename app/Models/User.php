@@ -4,7 +4,6 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -45,8 +44,18 @@ class User extends Authenticatable
         return $this->hasOne(Mentor::class);
     }
 
-    public function sessions(): HasMany
+    public function mentee(): HasOne
     {
-        return $this->hasMany(Session::class);
+        return $this->hasOne(Mentee::class);
+    }
+
+    public function scopeIsMentor($query)
+    {
+        return $query->whereHas('mentor');
+    }
+
+    public function scopeIsMentee($query)
+    {
+        return $query->whereHas('mentee');
     }
 }

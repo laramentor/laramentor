@@ -18,9 +18,13 @@ class SessionFactory extends Factory
     {
         return [
             'mentor_id' => 1,
-            'user_id' => 1,
+            'mentee_id' => 1,
+            'uuid' => $this->faker->uuid,
+            'name' => $this->faker->sentence,
+            'description' => $this->faker->sentence,
             'start_date_time' => now(),
             'end_date_time' => now()->addHour(),
+            'google_meeting_link' => $this->faker->url,
         ];
     }
 }

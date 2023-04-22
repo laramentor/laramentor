@@ -18,9 +18,9 @@ class Session extends Model
         'end_date_time' => 'datetime',
     ];
 
-    public function user(): BelongsTo
+    public function mentee(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Mentee::class);
     }
 
     public function mentor(): BelongsTo
@@ -36,7 +36,7 @@ class Session extends Model
         $event->startDateTime = $this->start_date_time;
         $event->endDateTime = $this->end_date_time;
         $event->addAttendee([
-            'email' => $this->user->email,
+            'email' => $this->mentee->user->email,
         ]);
         $event->addAttendee([
             'email' => $this->mentor->user->email,
@@ -45,8 +45,8 @@ class Session extends Model
 
         $newEvent = $event->save();
 
-        $this->event_id = $newEvent->googleEvent->id;
-        $this->meeting_link = $newEvent->googleEvent->hangoutLink;
+        $this->google_event_id = $newEvent->googleEvent->id;
+        $this->google_meeting_link = $newEvent->googleEvent->hangoutLink;
         $this->save();
     }
 
@@ -58,7 +58,7 @@ class Session extends Model
         $event->startDateTime = $this->start_date_time;
         $event->endDateTime = $this->end_date_time;
         $event->addAttendee([
-            'email' => $this->user->email,
+            'email' => $this->mentee->user->email,
         ]);
         $event->addAttendee([
             'email' => $this->mentor->user->email,
@@ -72,8 +72,8 @@ class Session extends Model
         $event = GoogleCalendarEventService::find($this->event_id);
         $event->delete($event->id);
 
-        $this->event_id = null;
-        $this->meeting_link = null;
+        $this->google_event_id = null;
+        $this->google_meeting_link = null;
         $this->save();
     }
 }
