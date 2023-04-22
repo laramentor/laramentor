@@ -18,6 +18,11 @@ class Session extends Model
         'end_date_time' => 'datetime',
     ];
 
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+    }
+
     public function mentee(): BelongsTo
     {
         return $this->belongsTo(Mentee::class);
