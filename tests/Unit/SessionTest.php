@@ -2,122 +2,102 @@
 
 namespace Tests\Unit;
 
+use App\Models\Mentee;
+use App\Models\Mentor;
 use App\Models\Session;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class SessionTest extends TestCase
-{
-    use RefreshDatabase;
+uses(TestCase::class, RefreshDatabase::class);
 
-    private $mentor;
+beforeEach(function () {
+    $this->mentor = User::factory()->create()->mentor()->create();
+    $this->mentee = User::factory()->create()->mentee()->create();
+    $this->session = Session::factory()->create([
+        'mentee_id' => $this->mentee->id,
+        'mentor_id' => $this->mentor->id,
+    ]);
+});
 
-    private $mentee;
+it('has start and end', function () {
+    $startTime = Carbon::now()->toDateTimeString();
+    $endTime = Carbon::now()->addHour()->toDateTimeString();
 
-    private $session;
+    $this->session->start_date_time = $startTime;
+    $this->session->end_date_time = $endTime;
+    $this->session->save();
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->mentor = User::factory()->create()->mentor()->create();
-        $this->mentee = User::factory()->create();
-        $this->session = Session::factory()->create([
-            'user_id' => $this->mentee->id,
-            'mentor_id' => $this->mentor->id,
-        ]);
-    }
+    expect($this->session->start_date_time)->toEqual($startTime);
+    expect($this->session->end_date_time)->toEqual($endTime);
+});
 
-    /** @test */
-    public function test_session_has_start_and_end()
-    {
-        $startTime = Carbon::now()->toDateTimeString();
-        $endTime = Carbon::now()->addHour()->toDateTimeString();
+it('has a name', function () {
+    $this->session->name = 'Test Session';
+    $this->session->save();
 
-        $this->session->start_date_time = $startTime;
-        $this->session->end_date_time = $endTime;
-        $this->session->save();
+    expect($this->session->name)->toBe('Test Session');
+});
 
-        $this->assertEquals($startTime, $this->session->start_date_time);
-        $this->assertEquals($endTime, $this->session->end_date_time);
-    }
+it('has a description', function () {
+    $this->session->description = 'Test Session Description';
+    $this->session->save();
 
-    /** @test */
-    public function test_session_has_a_name()
-    {
-        $this->session->name = 'Test Session';
-        $this->session->save();
+    expect($this->session->description)->toBe('Test Session Description');
+});
 
-        $this->assertEquals('Test Session', $this->session->name);
-    }
+it('has a mentor', function () {
+    expect($this->session->mentor)->toBeInstanceOf(Mentor::class);
+    expect($this->session->mentor->id)->toEqual($this->mentor->id);
+});
 
-    /** @test */
-    public function test_session_has_a_description()
-    {
-        $this->session->description = 'Test Session Description';
-        $this->session->save();
+it('has a mentee', function () {
+    expect($this->session->mentee)->toBeInstanceOf(Mentee::class);
+    expect($this->session->mentee->id)->toEqual($this->mentee->id);
+});
 
-        $this->assertEquals('Test Session Description', $this->session->description);
-    }
+it('has a uuid', function () {
+    expect($this->session->uuid)->toBeString();
+});
 
-    /** @test */
-    public function test_session_has_a_mentor()
-    {
-        $this->assertEquals($this->mentor->id, $this->session->mentor->id);
-    }
+it('can be updated', function () {
+    $this->session->name = 'New Session Name';
+    $this->session->description = 'New Session Description';
+    $this->session->save();
 
-    /** @test */
-    public function test_session_has_a_mentee()
-    {
-        $this->assertEquals($this->mentee->id, $this->session->user->id);
-    }
+    expect($this->session->name)->toBe('New Session Name');
+    expect($this->session->description)->toBe('New Session Description');
+});
 
-    /** @test */
-    public function test_session_can_be_updated()
-    {
-        $this->session->name = 'New Session Name';
-        $this->session->description = 'New Session Description';
-        $this->session->save();
+it('can be deleted', function () {
+    $this->session->delete();
+    expect($this->session->fresh())->toBeNull();
+});
 
-        $this->assertEquals('New Session Name', $this->session->name);
-        $this->assertEquals('New Session Description', $this->session->description);
-    }
+it('can create a meeting', function () {
+    $this->session->createMeeting();
 
-    /** @test */
-    public function test_session_can_be_deleted()
-    {
-        $this->session->delete();
-        $this->assertNull($this->session->fresh());
-    }
+    expect($this->session->google_event_id)->toBeString();
+    expect($this->session->google_meeting_link)->toBeString();
+});
 
-    /** @test */
-    public function test_meeting_can_be_created_for_session()
-    {
-        $this->session->createMeeting();
-        $this->assertNotNull($this->session->event_id);
-        $this->assertNotNull($this->session->meeting_link);
-    }
+it('can update a meeting', function () {
+    $this->session->createMeeting();
+    $this->session->start_date_time = now()->addHour();
+    $this->session->end_date_time = now()->addHour()->addHour();
+    $this->session->save();
 
-    /** @test */
-    public function test_meeting_time_can_be_updated_for_session()
-    {
-        $this->session->createMeeting();
-        $this->session->start_date_time = now()->addHour();
-        $this->session->end_date_time = now()->addHour()->addHour();
-        $this->session->save();
+    $this->session->updateMeeting();
 
-        $this->session->updateMeeting();
-        $this->assertEquals($this->session->start_date_time, $this->session->fresh()->start_date_time);
-        $this->assertEquals($this->session->end_date_time, $this->session->fresh()->end_date_time);
-    }
+    expect($this->session->fresh()->start_date_time)->toEqual($this->session->start_date_time);
+    expect($this->session->fresh()->end_date_time)->toEqual($this->session->end_date_time);
+});
 
-    /** @test */
-    public function test_meeting_can_be_deleted_for_session()
-    {
-        $this->session->createMeeting();
-        $this->session->deleteMeeting();
-        $this->assertNull($this->session->event_id);
-        $this->assertNull($this->session->meeting_link);
-    }
-}
+it('can delete a meeting', function () {
+    $this->session->createMeeting();
+    $this->session->deleteMeeting();
+
+    expect($this->session->fresh()->google_event_id)->toBeNull();
+    expect($this->session->fresh()->google_meeting_link)->toBeNull();
+});
