@@ -1,6 +1,10 @@
 <script setup>
-import { defineProps } from 'vue'
 import { Link } from '@inertiajs/vue3'
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+dayjs.extend(relativeTime)
+dayjs.extend(localizedFormat)
 
 const props = defineProps({
   mentors: {
@@ -39,7 +43,7 @@ const props = defineProps({
 
         <div class="flex flex-col" v-for="session in mentor_user.mentor.sessions">
           <Link :href="route('session.show', session.uuid)" class="relative inline-flex items-center px-4 py-4 text-sm font-medium text-gray-700 hover:text-gray-500">
-            <span>{{ session.start_date_time }} - {{ session.mentee.user.name }}</span>
+            <span :title="dayjs(session.start_date_time).format('llll')">{{ dayjs(session.start_date_time).fromNow() }} - {{ session.mentee.user.name }}</span>
           </Link>
         </div>
       </div>
