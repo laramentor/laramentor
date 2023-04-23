@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Mentor;
 use App\Models\Session;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -17,8 +17,8 @@ class DashboardController extends Controller
      */
     public function index(): Response
     {
-        // get a list of mentors and return it to the dashboard
-        $mentors = User::isMentor()->with(['mentor.sessions.mentor.user', 'mentor.sessions.mentee.user'])->get();
+        // get a list of mentors with their sessions and mentees
+        $mentors = Mentor::with(['user', 'sessions.mentee.user'])->get();
 
         return Inertia::render('Dashboard', [
             'mentors' => $mentors,
