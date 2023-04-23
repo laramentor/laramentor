@@ -7,6 +7,7 @@ use App\Models\Session;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -31,10 +32,11 @@ class DashboardController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'mentor_id' => ['required', 'exists:users,id'],
+            'mentor_id' => ['required', 'exists:mentors,id'],
         ]);
 
         $session = new Session;
+        $session->uuid = Str::uuid();
         $session->name = 'Demo session';
         $session->description = 'This is a demo session';
         $session->mentee_id = auth()->user()->mentee->id;
