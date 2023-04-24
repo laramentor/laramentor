@@ -15,6 +15,7 @@ const props = defineProps({
 
 const form = useForm({
   mentor_id: props.mentor.id,
+  start_date_time: dayjs().add(1, 'hour').format('YYYY-MM-DD HH:mm'),
 })
 
 </script>
@@ -26,9 +27,9 @@ const form = useForm({
       <dl class="mt-1 flex flex-grow flex-col justify-between">
         <!-- <dd class="text-sm text-gray-500">{{ mentor.user.title }}</dd> -->
         <dd class="mt-3 space-x-2">
+          <span class="inline-flex items-center rounded-full bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">Laravel</span>
           <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Vue</span>
-          <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Laravel</span>
-          <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Tailwind</span>
+          <span class="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">Tailwind</span>
         </dd>
       </dl>
     </div>
@@ -49,15 +50,10 @@ const form = useForm({
       </div>
     </div>
     <div>
-      <div class="-mt-px flex divide-x divide-gray-200">
-        <div class="flex w-0 flex-1">
-          <form @submit.prevent="form.post(route('session.store'))" class="flex flex-1">
-            <button type="submit" class="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900 hover:text-gray-800">
-              <span class="ml-3">Request Mentorship</span>
-            </button>
-          </form>
-        </div>
-      </div>
+      <form @submit.prevent="form.post(route('session.store'))" class="flex w-full justify-between">
+        <input type="datetime-local" v-model="form.start_date_time" class="flex-1 form-input bg-i border-transparent active:border-transparent text-sm font-semibold hover:bg-indigo-100 pr-0">
+        <button type="submit" class="bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 hover:bg-indigo-100">Request</button>
+      </form>
     </div>
   </div>
 </template>

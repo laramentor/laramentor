@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Mentor;
 use App\Models\Session;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -33,7 +34,10 @@ class DashboardController extends Controller
     {
         $request->validate([
             'mentor_id' => ['required', 'exists:mentors,id'],
+            'start_date_time' => ['required', 'date', 'after:now'],
         ]);
+
+        $start_date_time = Carbon::parse($request->start_date_time);
 
         $session = new Session;
         $session->uuid = Str::uuid();
@@ -41,8 +45,8 @@ class DashboardController extends Controller
         $session->description = 'This is a demo session';
         $session->mentee_id = auth()->user()->mentee->id;
         $session->mentor_id = $request->mentor_id;
-        $session->start_date_time = now()->addDays(7); // Change this to date picker
-        $session->end_date_time = now()->addDays(7)->addHours(1); // Change this to date picker
+        $session->start_date_time = $start_date_time;
+        $session->end_date_time = $start_date_time->addMinutes(60); // change to a config value set by mentor
         $session->save();
 
         $session->createMeeting();
