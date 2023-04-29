@@ -4,6 +4,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import TimezoneInput from '@/Components/TimezoneInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const form = useForm({
@@ -12,6 +13,7 @@ const form = useForm({
     password: '',
     password_confirmation: '',
     terms: false,
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
 });
 
 const submit = () => {
@@ -85,6 +87,19 @@ const submit = () => {
                 />
 
                 <InputError class="mt-2" :message="form.errors.password_confirmation" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="timezone" value="Timezone" />
+
+                <TimezoneInput
+                    id="timezone"
+                    class="mt-1 block w-full"
+                    v-model="form.timezone"
+                    required
+                />
+
+                <InputError class="mt-2" :message="form.errors.timezone" />
             </div>
 
             <div class="flex items-center justify-end mt-4">
