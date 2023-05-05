@@ -20,7 +20,7 @@ class DashboardController extends Controller
     public function index(): Response
     {
         // get a list of mentors with their sessions and mentees
-        $mentors = Mentor::with(['user', 'sessions.mentee.user'])->get();
+        $mentors = Mentor::with(['user', 'sessions.mentee.user', 'sessions.mentor'])->get();
 
         return Inertia::render('Dashboard', [
             'mentors' => $mentors,
