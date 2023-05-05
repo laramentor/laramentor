@@ -39,6 +39,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array<int, string>
+     */
+    protected $appends = [
+        'is_mentor',
+        'is_mentee',
+    ];
+
     public function mentor(): HasOne
     {
         return $this->hasOne(Mentor::class);
@@ -49,13 +59,23 @@ class User extends Authenticatable
         return $this->hasOne(Mentee::class);
     }
 
-    public function scopeIsMentor($query)
+    public function scopeMentors($query)
     {
         return $query->whereHas('mentor');
     }
 
-    public function scopeIsMentee($query)
+    public function scopeMentees($query)
     {
         return $query->whereHas('mentee');
+    }
+
+    public function getIsMentorAttribute()
+    {
+        return $this->mentor()->exists();
+    }
+
+    public function getIsMenteeAttribute()
+    {
+        return $this->mentee()->exists();
     }
 }
