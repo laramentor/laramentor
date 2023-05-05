@@ -60,4 +60,19 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    /**
+     * Update the user's timezone.
+     */
+    public function updateTimezone(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'timezone' => ['required', 'timezone'],
+        ]);
+
+        $request->user()->fill($request->only('timezone'));
+        $request->user()->save();
+
+        return Redirect::route('profile.edit');
+    }
 }

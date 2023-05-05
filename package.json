@@ -18,6 +18,8 @@
         "vue": "^3.2.41"
     },
     "dependencies": {
-        "dayjs": "^1.11.7"
+        "dayjs": "^1.11.7",
+        "@headlessui/vue": "^1.7.13",
+        "@heroicons/vue": "^2.0.17"
     }
 }
