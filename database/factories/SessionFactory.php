@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,14 +17,16 @@ class SessionFactory extends Factory
      */
     public function definition(): array
     {
+        $session_start_date_time = Carbon::parse(fake()->dateTimeBetween('now', '+1 week'));
+
         return [
             'mentor_id' => 1,
             'mentee_id' => 1,
             'uuid' => $this->faker->uuid,
             'name' => $this->faker->sentence,
             'description' => $this->faker->sentence,
-            'start_date_time' => now(),
-            'end_date_time' => now()->addHour(),
+            'start_date_time' => $session_start_date_time,
+            'end_date_time' => $session_start_date_time->addHour(),
             'google_meeting_link' => $this->faker->url,
         ];
     }
