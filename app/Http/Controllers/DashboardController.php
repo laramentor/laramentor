@@ -59,6 +59,8 @@ class DashboardController extends Controller
      */
     public function show(Session $session): Response
     {
+        $session->load(['mentee.user', 'mentor.user']);
+
         return Inertia::render('Session', [
             'session' => $session,
         ]);
