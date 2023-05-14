@@ -41,10 +41,10 @@ class DatabaseSeeder extends Seeder
         $this->command->info('Mentee: ' . $mentee->user->email);
 
         // add sessions to mentors
-        User::isMentor()->get()->each(function ($user) {
+        User::mentors()->with('mentor')->get()->each(function ($user) {
             Session::factory()->create([
                 'mentor_id' => $user->mentor->id,
-                'mentee_id' => User::isMentee()->inRandomOrder()->first()->mentee->id,
+                'mentee_id' => User::mentees()->inRandomOrder()->first()->mentee->id,
             ]);
         });
     }
