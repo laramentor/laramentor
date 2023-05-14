@@ -34,10 +34,10 @@ class DashboardController extends Controller
     {
         $request->validate([
             'mentor_id' => ['required', 'exists:mentors,id'],
-            'start_date_time' => ['required', 'date', 'after:now'],
+            'start_date_time' => ['required', 'date'],
         ]);
 
-        $start_date_time = Carbon::parse($request->start_date_time);
+        $start_date_time = Carbon::parse($request->start_date_time, auth()->user()->timezone)->setTimezone('UTC');
 
         $session = new Session;
         $session->uuid = Str::uuid();
