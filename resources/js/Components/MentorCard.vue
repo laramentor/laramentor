@@ -1,10 +1,19 @@
 <script setup>
-import { Link, useForm } from '@inertiajs/vue3'
+import { computed } from 'vue';
+import { Link, useForm, usePage } from '@inertiajs/vue3';
 import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime'
-import localizedFormat from 'dayjs/plugin/localizedFormat'
+import relativeTime from 'dayjs/plugin/relativeTime';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 dayjs.extend(relativeTime)
 dayjs.extend(localizedFormat)
+dayjs.extend(utc)
+dayjs.extend(timezone)
+
+const page = usePage()
+
+const user = computed(() => page.props.auth.user)
 
 const props = defineProps({
   mentor: {
@@ -24,6 +33,7 @@ const form = useForm({
     <div class="flex flex-1 flex-col p-8">
       <!-- <img class="mx-auto h-32 w-32 flex-shrink-0 rounded-full" :src="mentor.imageUrl" alt="" /> -->
       <h3 class="mt-6 text-sm font-medium text-gray-900">{{ mentor.user.name }}</h3>
+      <h3 class="mt-1 text-xs font-medium text-gray-900">{{ mentor.user.timezone }}</h3>
       <dl class="mt-1 flex flex-grow flex-col justify-between">
         <!-- <dd class="text-sm text-gray-500">{{ mentor.user.title }}</dd> -->
         <dd class="mt-3 space-x-2">
@@ -44,12 +54,13 @@ const form = useForm({
       </div>
 
       <div class="flex flex-col" v-for="session in mentor.sessions">
-        <Link :href="route('session.show', session.uuid)" class="relative inline-flex items-center px-4 py-4 text-sm font-medium text-gray-700 hover:text-gray-500">
-          <span :title="dayjs(session.start_date_time).format('llll')">{{ dayjs(session.start_date_time).fromNow() }} - {{ session.mentee.user.name }}</span>
-        </Link>
+        <Link :href="route('session.show', session.uuid)" class="relative flex px-4 py-4 text-sm font-medium text-gray-700 hover:text-gray-500 space-2">
+          <span>{{ session.mentee.user.name }}</span>
+          <span>{{ dayjs(session.start_date_time).tz(user.timezone).format('lll') }}</span>
+         </Link>
       </div>
     </div>
-    <div>
+    <div v-show="user.is_mentee && user.id !=  mentor.user.id">
       <form @submit.prevent="form.post(route('session.store'))" class="flex w-full justify-between">
         <input type="datetime-local" v-model="form.start_date_time" class="flex-1 form-input bg-i border-transparent active:border-transparent text-sm font-semibold hover:bg-indigo-100 pr-0">
         <button type="submit" class="bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 hover:bg-indigo-100">Request</button>
