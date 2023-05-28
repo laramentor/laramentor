@@ -90,4 +90,34 @@ class ProfileController extends Controller
 
         return Redirect::route('profile.edit');
     }
+
+    /**
+     * Show mentor information
+     */
+    public function showMentorInformation(Request $request)
+    {
+        return response()->json([
+            'mentor' => $request->user()->mentor,
+        ]);
+    }
+
+    /**
+     * Update user mentor information
+     */
+    public function updateMentorInformation(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'job_title' => ['nullable', 'string'],
+            'company' => ['nullable', 'string'],
+            'hourly_rate' => ['nullable', 'numeric'],
+        ]);
+
+        $mentor = $request->user()->mentor;
+        $mentor->job_title = $request->job_title;
+        $mentor->company = $request->company;
+        $mentor->hourly_rate = $request->hourly_rate;
+        $mentor->save();
+
+        return Redirect::route('profile.edit');
+    }
 }

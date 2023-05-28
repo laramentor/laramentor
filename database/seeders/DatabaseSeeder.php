@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Mentor;
 use App\Models\Session;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -19,7 +20,8 @@ class DatabaseSeeder extends Seeder
         // create 3 users as mentors
         User::factory()->count(3)->create()
             ->each(function ($user) {
-                $user->mentor()->create();
+                $mentor = Mentor::factory()->make();
+                $user->mentor()->save($mentor);
             });
 
         // create 3 users as mentees
@@ -28,11 +30,11 @@ class DatabaseSeeder extends Seeder
                 $user->mentee()->create();
             });
 
-        // create user as mentor and output email
-        $mentor = User::factory()->create()
-            ->mentor()->create();
+        // create user as mentor (with factory) and output email
+        $user = User::factory()->create();
+        $user->mentor()->save(Mentor::factory()->make());
 
-        $this->command->info('Mentor: ' . $mentor->user->email);
+        $this->command->info('Mentor: ' . $user->email);
 
         // create user as mentee and output email
         $mentee = User::factory()->create()

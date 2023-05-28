@@ -3,6 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import DeleteUserForm from './Partials/DeleteUserForm.vue';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
+import UpdateMentorInformationForm from './Partials/UpdateMentorInformationForm.vue';
 import UpdateTimezoneForm from './Partials/UpdateTimezoneForm.vue';
 import UpdateMentorStatusForm from './Partials/UpdateMentorStatusForm.vue';
 import { Head, usePage } from '@inertiajs/vue3';
@@ -38,6 +39,12 @@ defineProps({
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
                 <div v-if="! user.is_mentor" class="px-8 py-6 bg-indigo-50 dark:bg-indigo-950 text-gray-800 dark:text-gray-200 shadow sm:rounded-lg">
                     <UpdateMentorStatusForm :user="user" @update-mentor-status="updateMentorStatus" />
+                </div>
+
+                <div v-if="user.is_mentor" class="p-4 sm:p-8 bg-indigo-50 dark:bg-indigo-950 shadow sm:rounded-lg">
+                    <UpdateMentorInformationForm
+                        class="max-w-xl"
+                    />
                 </div>
 
                 <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">

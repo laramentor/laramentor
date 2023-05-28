@@ -29,4 +29,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::patch('/profile/timezone', [ProfileController::class, 'updateTimezone'])->name('profile.update.timezone');
     Route::patch('/profile/mentor/status', [ProfileController::class, 'updateMentorStatus'])->name('profile.update.mentor.status');
+    Route::get('/profile/mentor/information', [ProfileController::class, 'showMentorInformation'])->name('profile.show.mentor.information');
+    Route::patch('/profile/mentor/information', [ProfileController::class, 'updateMentorInformation'])->name('profile.update.mentor.information');
 });
