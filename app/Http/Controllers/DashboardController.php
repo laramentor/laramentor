@@ -37,7 +37,7 @@ class DashboardController extends Controller
             'start_date_time' => ['required', 'date'],
         ]);
 
-        $start_date_time = Carbon::parse($request->start_date_time, auth()->user()->timezone)->setTimezone('UTC');
+        $start_date_time = Carbon::parse($request->start_date_time, auth()->user()->timezone)->setTimezone(config('app.timezone'));
 
         $session = new Session;
         $session->uuid = Str::uuid();
