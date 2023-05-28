@@ -10,7 +10,7 @@ const props = defineProps({
 
 </script>
 <template>
-  <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+  <ul role="list" class="flex flex-col">
     <li v-for="mentor in mentors" :key="mentor.id">
       <MentorCard :mentor="mentor" />
     </li>

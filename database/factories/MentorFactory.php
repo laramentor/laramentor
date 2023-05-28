@@ -16,6 +16,10 @@ class MentorFactory extends Factory
      */
     public function definition(): array
     {
-        return [];
+        return [
+            'job_title' => fake()->jobTitle(),
+            'company' => fake()->company(),
+            'hourly_rate' => fake()->numberBetween(10, 100),
+        ];
     }
 }

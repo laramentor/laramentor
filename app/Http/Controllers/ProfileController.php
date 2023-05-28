@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Mentor;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -72,6 +73,50 @@ class ProfileController extends Controller
 
         $request->user()->fill($request->only('timezone'));
         $request->user()->save();
+
+        return Redirect::route('profile.edit');
+    }
+
+    /**
+     * Update user mentor status
+     */
+    public function updateMentorStatus(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'is_mentor' => ['required', 'boolean'],
+        ]);
+
+        Auth::user()->mentor()->save(new Mentor);
+
+        return Redirect::route('profile.edit');
+    }
+
+    /**
+     * Show mentor information
+     */
+    public function showMentorInformation(Request $request)
+    {
+        return response()->json([
+            'mentor' => $request->user()->mentor,
+        ]);
+    }
+
+    /**
+     * Update user mentor information
+     */
+    public function updateMentorInformation(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'job_title' => ['nullable', 'string'],
+            'company' => ['nullable', 'string'],
+            'hourly_rate' => ['nullable', 'numeric'],
+        ]);
+
+        $mentor = $request->user()->mentor;
+        $mentor->job_title = $request->job_title;
+        $mentor->company = $request->company;
+        $mentor->hourly_rate = $request->hourly_rate;
+        $mentor->save();
 
         return Redirect::route('profile.edit');
     }

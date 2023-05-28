@@ -1,19 +1,5 @@
 <script setup>
-import { computed } from 'vue';
-import { Link, useForm, usePage } from '@inertiajs/vue3';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import localizedFormat from 'dayjs/plugin/localizedFormat';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-dayjs.extend(relativeTime)
-dayjs.extend(localizedFormat)
-dayjs.extend(utc)
-dayjs.extend(timezone)
-
-const page = usePage()
-
-const user = computed(() => page.props.auth.user)
+import { defineProps } from 'vue'
 
 const props = defineProps({
   mentor: {
@@ -22,49 +8,37 @@ const props = defineProps({
   },
 })
 
-const form = useForm({
-  mentor_id: props.mentor.id,
-  start_date_time: dayjs().add(1, 'hour').format('YYYY-MM-DD HH:mm'),
-})
+const image = 'https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80';
 
 </script>
 <template>
-  <div class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow">
-    <div class="flex flex-1 flex-col p-8">
-      <!-- <img class="mx-auto h-32 w-32 flex-shrink-0 rounded-full" :src="mentor.imageUrl" alt="" /> -->
-      <h3 class="mt-6 text-sm font-medium text-gray-900">{{ mentor.user.name }}</h3>
-      <h3 class="mt-1 text-xs font-medium text-gray-900">{{ mentor.user.timezone }}</h3>
-      <dl class="mt-1 flex flex-grow flex-col justify-between">
-        <!-- <dd class="text-sm text-gray-500">{{ mentor.user.title }}</dd> -->
-        <dd class="mt-3 space-x-2">
-          <span class="inline-flex items-center rounded-full bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">Laravel</span>
-          <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Vue</span>
-          <span class="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">Tailwind</span>
-        </dd>
-      </dl>
-    </div>
-    <div v-show="mentor.sessions">
-      <!-- upcoming sessions -->
-      <div class="-mt-px flex divide-x divide-gray-200">
-        <div class="flex w-0 flex-1">
-          <a href="#" class="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900 hover:text-gray-800">
-            <span class="ml-3">Upcoming Sessions</span>
-          </a>
+  <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg px-7 py-8 transition-all duration-150 mb-12 max-w-screen-md mx-auto text-gray-800 dark:text-gray-200 leading-tight">
+    <div class="sm:grid grid-cols-12 sm:space-x-8">
+      <div class="col-span-4 md:col-span-5 relative">
+        <a
+          class="relative w-full h-72 bg-center bg-cover inline-block rounded-lg overflow-hidden"
+          :style="{ backgroundImage: `url(${image})`}"
+        >
+        </a>
+      </div>
+      <div class="relative col-span-full col-start-5 md:col-start-6">
+        <div class="text-xl font-bold">{{ mentor.user.name }}</div>
+        <div class="flex text-xs">
+          <div class="">{{ mentor.job_title }}</div>
+          <div class="ml-2">({{ mentor.user.timezone }})</div>
         </div>
+        <div class="mt-4 text-sm line-clamp-5">{{ mentor.user.bio }}</div>
+        <div class="flex items-center flex-wrap justify-start space-x-2 mt-3">
+          <div class="bg-indigo-100 text-indigo-600 rounded-full py-0.5 px-2.5 text-xs font-bold md:inline-block hover:bg-">Tailwind</div>
+          <div class="bg-indigo-100 text-indigo-600 rounded-full py-0.5 px-2.5 text-xs font-bold md:inline-block hover:bg-">Laravel</div>
+          <div class="bg-indigo-100 text-indigo-600 rounded-full py-0.5 px-2.5 text-xs font-bold md:inline-block hover:bg-">Vue</div>
+        </div>
+        <div class="mt-4 text-indigo-600 dark:text-indigo-500 leading-none">
+          <span class="text-2xl font-black">USD{{ mentor.hourly_rate }}</span>
+          <span class="inline font-bold text-lg">/hour</span>
+        </div>
+        <button type="button" class="mt-3 rounded-md bg-indigo-600 dark:bg-indigo-500 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">View Profile</button>
       </div>
-
-      <div class="flex flex-col" v-for="session in mentor.sessions">
-        <Link :href="route('session.show', session.uuid)" class="relative flex px-4 py-4 text-sm font-medium text-gray-700 hover:text-gray-500 space-2">
-          <span>{{ session.mentee.user.name }}</span>
-          <span>{{ dayjs(session.start_date_time).tz(user.timezone).format('lll') }}</span>
-         </Link>
-      </div>
-    </div>
-    <div v-show="user.is_mentee && user.id !=  mentor.user.id">
-      <form @submit.prevent="form.post(route('session.store'))" class="flex w-full justify-between">
-        <input type="datetime-local" v-model="form.start_date_time" class="flex-1 form-input bg-i border-transparent active:border-transparent text-sm font-semibold hover:bg-indigo-100 pr-0">
-        <button type="submit" class="bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 hover:bg-indigo-100">Request</button>
-      </form>
     </div>
   </div>
 </template>
