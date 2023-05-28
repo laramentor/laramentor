@@ -3,6 +3,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import TextArea from '@/Components/TextArea.vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 
 defineProps({
@@ -19,6 +20,7 @@ const user = usePage().props.auth.user;
 const form = useForm({
     name: user.name,
     email: user.email,
+    bio: user.bio,
 });
 </script>
 
@@ -58,10 +60,25 @@ const form = useForm({
                     class="mt-1 block w-full"
                     v-model="form.email"
                     required
-                    autocomplete="username"
                 />
 
                 <InputError class="mt-2" :message="form.errors.email" />
+            </div>
+
+            <div>
+                <InputLabel for="bio" value="Bio" />
+
+                <TextArea
+                    id="bio"
+                    type="bio"
+                    class="mt-1 block w-full resize-none"
+                    v-model="form.bio"
+                    required
+                    autocomplete="bio"
+                    rows="5"
+                />
+
+                <InputError class="mt-2" :message="form.errors.bio" />
             </div>
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">
