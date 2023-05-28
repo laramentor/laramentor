@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Mentor;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -72,6 +73,20 @@ class ProfileController extends Controller
 
         $request->user()->fill($request->only('timezone'));
         $request->user()->save();
+
+        return Redirect::route('profile.edit');
+    }
+
+    /**
+     * Update user mentor status
+     */
+    public function updateMentorStatus(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'is_mentor' => ['required', 'boolean'],
+        ]);
+
+        Auth::user()->mentor()->save(new Mentor);
 
         return Redirect::route('profile.edit');
     }
