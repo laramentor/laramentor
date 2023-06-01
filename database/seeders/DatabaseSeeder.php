@@ -25,22 +25,23 @@ class DatabaseSeeder extends Seeder
             ->create();
 
         // create 3 users as mentees
-        User::factory()->count(3)->create()
-            ->each(function ($user) {
-                $user->mentee()->create();
-            });
+        User::factory()->count(3)
+            ->hasMentee()
+            ->create();
 
-        // create user as mentor (with factory) and output email
-        $user = User::factory()->create();
-        $user->mentor()->save(Mentor::factory()->make());
+        // create user as mentor and output email
+        $user = User::factory()
+            ->hasMentor()
+            ->create();
 
         $this->command->info('Mentor: ' . $user->email);
 
         // create user as mentee and output email
-        $mentee = User::factory()->create()
-            ->mentee()->create();
+        $user = User::factory()
+            ->hasMentee()
+            ->create();
 
-        $this->command->info('Mentee: ' . $mentee->user->email);
+        $this->command->info('Mentee: ' . $user->email);
 
         // add sessions to mentors
         User::mentors()->with('mentor')->get()->each(function ($user) {
