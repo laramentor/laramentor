@@ -31,4 +31,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile/mentor/status', [ProfileController::class, 'updateMentorStatus'])->name('profile.update.mentor.status');
     Route::get('/profile/mentor/information', [ProfileController::class, 'showMentorInformation'])->name('profile.show.mentor.information');
     Route::patch('/profile/mentor/information', [ProfileController::class, 'updateMentorInformation'])->name('profile.update.mentor.information');
+
+    Route::get('/skills', [ProfileController::class, 'showSkills'])->name('skills.index');
 });

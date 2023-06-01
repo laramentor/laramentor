@@ -7,12 +7,14 @@ import NumberInput from '@/Components/NumberInput.vue';
 import { useForm, usePage } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
 import axios from 'axios';
+import SkillsInput from '@/Components/SkillsInput.vue';
 
 onMounted(() => {
     axios.get(route('profile.show.mentor.information')).then(response => {
         form.job_title = response.data.mentor.job_title ?? '';
         form.company = response.data.mentor.company ?? '';
         form.hourly_rate = response.data.mentor.hourly_rate ?? 0;
+        form.skills = response.data.mentor.skills ?? [];
     })
 })
 
@@ -20,6 +22,7 @@ const form = useForm({
     job_title: '',
     company: '',
     hourly_rate: 0,
+    skills: [],
 });
 
 const submit = () => {
@@ -83,6 +86,17 @@ const submit = () => {
                 <InputError class="mt-2" :message="form.errors.hourly_rate" />
             </div>
 
+            <div>
+                <InputLabel for="skills" value="Skills" />
+
+                <SkillsInput
+                    id="skills"
+                    class="mt-1 block"
+                    v-model="form.skills"
+                />
+
+                <InputError class="mt-2" :message="form.errors.skills" />
+            </div>
 
             <div class="flex items-center gap-4">
                 <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
