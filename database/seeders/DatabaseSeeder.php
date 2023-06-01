@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Mentor;
 use App\Models\Session;
+use App\Models\Skill;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -18,11 +19,10 @@ class DatabaseSeeder extends Seeder
         $this->command->info('You can use the following users (with \'password\') to login to ' . config('app.name'));
 
         // create 3 users as mentors
-        User::factory()->count(3)->create()
-            ->each(function ($user) {
-                $mentor = Mentor::factory()->make();
-                $user->mentor()->save($mentor);
-            });
+        User::factory()->count(3)
+            ->has(Mentor::factory()
+                ->hasAttached(Skill::factory()->count(3)))
+            ->create();
 
         // create 3 users as mentees
         User::factory()->count(3)->create()

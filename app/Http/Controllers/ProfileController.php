@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Mentor;
+use App\Models\Skill;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -97,7 +98,7 @@ class ProfileController extends Controller
     public function showMentorInformation(Request $request)
     {
         return response()->json([
-            'mentor' => $request->user()->mentor,
+            'mentor' => $request->user()->mentor()->with('skills')->first(),
         ]);
     }
 
@@ -110,6 +111,7 @@ class ProfileController extends Controller
             'job_title' => ['nullable', 'string'],
             'company' => ['nullable', 'string'],
             'hourly_rate' => ['nullable', 'numeric'],
+            'skills' => ['nullable', 'array'],
         ]);
 
         $mentor = $request->user()->mentor;
@@ -118,6 +120,18 @@ class ProfileController extends Controller
         $mentor->hourly_rate = $request->hourly_rate;
         $mentor->save();
 
+        $mentor->skills()->sync(collect($request->skills)->pluck('id'));
+
         return Redirect::route('profile.edit');
+    }
+
+    /**
+     * Show skills
+     */
+    public function showSkills(Request $request)
+    {
+        return response()->json([
+            'skills' => Skill::all(),
+        ]);
     }
 }

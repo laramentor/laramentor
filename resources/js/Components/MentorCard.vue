@@ -29,9 +29,9 @@ const image = 'https://images.unsplash.com/photo-1463453091185-61582044d556?ixli
         </div>
         <div class="mt-4 text-sm line-clamp-5">{{ mentor.user.bio }}</div>
         <div class="flex items-center flex-wrap justify-start space-x-2 mt-3">
-          <div class="bg-indigo-100 text-indigo-600 rounded-full py-0.5 px-2.5 text-xs font-bold md:inline-block hover:bg-">Tailwind</div>
-          <div class="bg-indigo-100 text-indigo-600 rounded-full py-0.5 px-2.5 text-xs font-bold md:inline-block hover:bg-">Laravel</div>
-          <div class="bg-indigo-100 text-indigo-600 rounded-full py-0.5 px-2.5 text-xs font-bold md:inline-block hover:bg-">Vue</div>
+          <div v-for="skill in mentor.skills" class="bg-indigo-100 text-indigo-600 rounded-full py-0.5 px-2.5 text-xs font-bold md:inline-block hover:bg-indigo-200">
+            {{ skill.name }}
+          </div>
         </div>
         <div class="mt-4 text-indigo-600 dark:text-indigo-500 leading-none">
           <span class="text-2xl font-black">USD{{ mentor.hourly_rate }}</span>
