@@ -2,18 +2,25 @@
 import "@uploadcare/blocks/web/lr-basic.min.css";
 import * as LR from "@uploadcare/blocks";
 import { PACKAGE_VERSION } from "@uploadcare/blocks/env";
-import { ref } from "vue";
+import { defineProps, defineEmits } from "vue";
 
 LR.registerBlocks(LR);
 
 const api_key = import.meta.env.VITE_UPLOADCARE_PUBLIC_KEY;
 
-const files = ref([]);
+const emit = defineEmits(['update:modelValue']);
 
 const handleUploaderEvent = (e) => {
-  const { data: uploadedfiles } = e.detail;
-  files.value = uploadedfiles;
+  const { data: files } = e.detail;
+
+  emit("update:modelValue", files);
 };
+
+defineProps({
+  modelValue: {
+    type: Array
+  },
+});
 
 </script>
 
@@ -24,11 +31,6 @@ const handleUploaderEvent = (e) => {
       :css-src="`https://unpkg.com/@uploadcare/blocks@${PACKAGE_VERSION}/web/file-uploader-minimal.min.css`">
       <lr-data-output @lr-data-output="handleUploaderEvent" use-event hidden class="uploader-cfg"></lr-data-output>
     </lr-file-uploader-minimal>
-
-    <div class="grid gap-4 grid-cols-3 w-full max-w-64">
-      <img v-for="file in files" :key="file.uuid" :src="`https://ucarecdn.com/${file.uuid}/${file.cdnUrlModifiers || ''
-        }-/preview/-/scale_crop/400x400/`" width="200" />
-    </div>
   </div>
 </template>
 

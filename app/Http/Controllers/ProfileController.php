@@ -79,6 +79,21 @@ class ProfileController extends Controller
     }
 
     /**
+     * Update the user's avatar.
+     */
+    public function updateAvatar(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'avatar_url' => ['required', 'url'],
+        ]);
+
+        $request->user()->fill($request->only('avatar_url'));
+        $request->user()->save();
+
+        return Redirect::route('profile.edit');
+    }
+
+    /**
      * Update user mentor status
      */
     public function updateMentorStatus(Request $request): RedirectResponse
