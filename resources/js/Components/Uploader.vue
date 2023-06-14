@@ -2,9 +2,11 @@
 import "@uploadcare/blocks/web/lr-basic.min.css";
 import * as LR from "@uploadcare/blocks";
 import { PACKAGE_VERSION } from "@uploadcare/blocks/env";
-import { ref, defineCustomElement } from "vue";
+import { ref } from "vue";
 
 LR.registerBlocks(LR);
+
+const api_key = import.meta.env.VITE_UPLOADCARE_PUBLIC_KEY;
 
 const files = ref([]);
 
@@ -18,6 +20,7 @@ const handleUploaderEvent = (e) => {
 <template>
   <div class="flex flex-col gap-2">
     <lr-file-uploader-minimal class="uploader-cfg"
+      :style="`--cfg-pubkey: '${api_key}';`"
       :css-src="`https://unpkg.com/@uploadcare/blocks@${PACKAGE_VERSION}/web/file-uploader-minimal.min.css`">
       <lr-data-output @lr-data-output="handleUploaderEvent" use-event hidden class="uploader-cfg"></lr-data-output>
     </lr-file-uploader-minimal>
@@ -34,7 +37,6 @@ const handleUploaderEvent = (e) => {
   --ctx-name: "uploader";
 
   /* DO NOT FORGET TO USE YOUR OWN PUBLIC KEY */
-  --cfg-pubkey: "024439cadfc908085f5c";
   --cfg-img-only: 1;
   --cfg-multiple: 0;
   --cfg-max-local-file-size-bytes: 10485760;
@@ -45,5 +47,3 @@ const handleUploaderEvent = (e) => {
   --l-accent: 41%;
 }
 </style>
-
-
