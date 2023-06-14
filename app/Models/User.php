@@ -49,6 +49,11 @@ class User extends Authenticatable
         'is_mentee',
     ];
 
+    public function getRouteKeyName(): string
+    {
+        return 'username';
+    }
+
     public function mentor(): HasOne
     {
         return $this->hasOne(Mentor::class);

@@ -1,5 +1,6 @@
 <script setup>
 import { defineProps } from 'vue'
+import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({
   mentor: {
@@ -38,7 +39,12 @@ const image = props.mentor.user.avatar_url ? props.mentor.user.avatar_url : `htt
           <span class="text-2xl font-black">USD{{ mentor.hourly_rate }}</span>
           <span class="inline font-bold text-lg">/hour</span>
         </div>
-        <button type="button" class="mt-3 rounded-md bg-indigo-600 dark:bg-indigo-500 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">View Profile</button>
+        <Link
+          :href="route('profile.show', mentor.user)"
+          type="button"
+          class="mt-3 rounded-md bg-indigo-600 dark:bg-indigo-500 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+          View Profile
+        </Link>
       </div>
     </div>
   </div>

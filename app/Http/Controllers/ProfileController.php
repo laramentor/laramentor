@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Mentor;
 use App\Models\Skill;
+use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,6 +16,28 @@ use Inertia\Response;
 
 class ProfileController extends Controller
 {
+    /**
+     * Display the user's profile.
+     */
+    public function show(Request $request, User $user): Response
+    {
+        $user->load(['mentor.skills']);
+
+        // if the user is the logged in user, and they are a mentor, load the mentor's sessions
+        if ($request->user()?->is($user) && $user->mentor) {
+            $user->mentor->load(['sessions']);
+        }
+
+        // if the user is the logged in user, and they are a mentee, load the mentee's sessions
+        if ($request->user()?->is($user) && $user->mentee) {
+            $user->mentee->load(['sessions']);
+        }
+
+        return Inertia::render('Profile/Show', [
+            'user' => $user,
+        ]);
+    }
+
     /**
      * Display the user's profile form.
      */
