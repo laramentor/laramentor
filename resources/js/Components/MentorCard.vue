@@ -10,7 +10,7 @@ const props = defineProps({
 })
 
 const encodedName = encodeURI(props.mentor.user.name);
-const image = props.mentor.user.avatar_url ? props.mentor.user.avatar_url : `https://ui-avatars.com/api/?name=${encodedName}&color=4f46e5&background=c7d2fe`;
+const image = props.mentor.user.avatar;
 
 </script>
 <template>

@@ -63,7 +63,7 @@ const reviews = {
                     <div class="lg:grid lg:grid-cols-7 lg:grid-rows-1 lg:gap-x-8 lg:gap-y-10 xl:gap-x-16">
                         <div class="lg:col-span-4 lg:row-end-1">
                             <div class="aspect-h-3 aspect-w-4 overflow-hidden rounded-lg flex justify-center">
-                                <img :src="user.avatar_url ? user.avatar_url : `https://ui-avatars.com/api/?name=${user.name}&color=4f46e5&background=c7d2fe`" :alt="user.name" class="object-cover object-center rounded-lg" />
+                                <img :src="user.avatar" :alt="user.name" class="object-cover object-center rounded-lg" />
                             </div>
                         </div>
 
@@ -128,7 +128,7 @@ const reviews = {
                                     <div v-if="user.is_mentor">
                                         <div v-for="(session, sessionIdx) in user.mentor.sessions" :key="session.id" class="flex space-x-4 text-sm text-gray-800 dark:text-gray-200">
                                             <div class="flex-none py-10">
-                                                <img :src="session.mentee.user.avatar_url" alt="" class="h-10 w-10 rounded-full bg-gray-100" />
+                                                <img :src="session.mentee.user.avatar" alt="" class="h-10 w-10 rounded-full bg-gray-100" />
                                             </div>
                                             <div :class="[sessionIdx === 0 ? '' : 'border-t border-gray-200', 'py-10']">
                                                 <h3 class="font-medium text-gray-900 dark:text-gray-100">{{ session.author }}</h3>
@@ -151,7 +151,7 @@ const reviews = {
                                     <div v-if="user.is_mentee">
                                         <div v-for="(session, sessionIdx) in user.mentee.sessions" :key="session.id" class="flex space-x-4 text-sm text-gray-800 dark:text-gray-200">
                                             <div class="flex-none py-10">
-                                                <img :src="session.mentor.user.avatar_url" alt="" class="h-10 w-10 rounded-full bg-gray-100" />
+                                                <img :src="session.mentor.user.avatar" alt="" class="h-10 w-10 rounded-full bg-gray-100" />
                                             </div>
                                             <div :class="[sessionIdx === 0 ? '' : 'border-t border-gray-200', 'py-10']">
                                                 <h3 class="font-medium text-gray-900 dark:text-gray-100">{{ session.author }}</h3>

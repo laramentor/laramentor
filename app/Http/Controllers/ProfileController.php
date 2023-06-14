@@ -25,12 +25,12 @@ class ProfileController extends Controller
 
         // if the user is the logged in user, and they are a mentor, load the mentor's sessions
         if ($request->user()?->is($user) && $user->mentor) {
-            $user->mentor->load(['sessions']);
+            $user->mentor->load(['sessions.mentee.user']);
         }
 
         // if the user is the logged in user, and they are a mentee, load the mentee's sessions
         if ($request->user()?->is($user) && $user->mentee) {
-            $user->mentee->load(['sessions']);
+            $user->mentee->load(['sessions.mentor.user']);
         }
 
         return Inertia::render('Profile/Show', [
