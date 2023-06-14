@@ -15,7 +15,9 @@ export default defineConfig({
                     base: null,
                     includeAbsolute: false,
                 },
-                isCustomElement: tag => tag.startsWith('lr-'),
+                compilerOptions: {
+                    isCustomElement: tag => tag.startsWith('lr-'),
+                },
             },
         }),
     ],

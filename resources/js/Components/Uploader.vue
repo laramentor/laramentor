@@ -1,3 +1,20 @@
+<script setup>
+import "@uploadcare/blocks/web/lr-basic.min.css";
+import * as LR from "@uploadcare/blocks";
+import { PACKAGE_VERSION } from "@uploadcare/blocks/env";
+import { ref, defineCustomElement } from "vue";
+
+LR.registerBlocks(LR);
+
+const files = ref([]);
+
+const handleUploaderEvent = (e) => {
+  const { data: uploadedfiles } = e.detail;
+  files.value = uploadedfiles;
+};
+
+</script>
+
 <template>
   <div class="flex flex-col gap-2">
     <lr-file-uploader-minimal class="uploader-cfg"
@@ -11,36 +28,6 @@
     </div>
   </div>
 </template>
-
-<script>
-/*
- * Use minified version because codesandbox can't bundle raw css with relative imports.
- * It's better to use '@uploadcare/blocks/blocks/themes/lr-basic/index.css' instead
- */
-import "@uploadcare/blocks/web/lr-basic.min.css";
-import * as LR from "@uploadcare/blocks";
-import { PACKAGE_VERSION } from "@uploadcare/blocks/env";
-
-LR.registerBlocks(LR);
-
-export default {
-  name: "Uploader",
-  setup() {
-    return { PACKAGE_VERSION };
-  },
-  data() {
-    return {
-      files: [],
-    };
-  },
-  methods: {
-    handleUploaderEvent(e) {
-      const { data: files } = e.detail;
-      this.files = files;
-    },
-  },
-};
-</script>
 
 <style scoped>
 .uploader-cfg {
