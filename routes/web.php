@@ -24,6 +24,7 @@ Route::middleware('auth')->group(function () {
     // session.show endpoint is only for demo purposes
     Route::get('/session/{session}', [DashboardController::class, 'show'])->name('session.show');
 
+    Route::get('/@{user}', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

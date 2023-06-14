@@ -4,11 +4,14 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import TextAddOnInput from '@/Components/TextAddOnInput.vue';
 import TimezoneInput from '@/Components/TimezoneInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { watch } from 'vue';
 
 const form = useForm({
     name: '',
+    username: '',
     email: '',
     password: '',
     password_confirmation: '',
@@ -21,6 +24,12 @@ const submit = () => {
         onFinish: () => form.reset('password', 'password_confirmation'),
     });
 };
+
+// when the name field changes, update the username field
+watch(() => form.name, (value) => {
+    form.username = value.toLowerCase().replace(/\s+/g, '');
+});
+
 </script>
 
 <template>
@@ -42,6 +51,22 @@ const submit = () => {
                 />
 
                 <InputError class="mt-2" :message="form.errors.name" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="username" value="Username" />
+
+                <TextAddOnInput
+                    id="username"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.username"
+                    required
+                    autofocus
+                    autocomplete="username"
+                />
+
+                <InputError class="mt-2" :message="form.errors.username" />
             </div>
 
             <div class="mt-4">

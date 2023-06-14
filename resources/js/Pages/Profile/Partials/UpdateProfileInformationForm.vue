@@ -34,6 +34,10 @@ const form = useForm({
             </p>
         </header>
 
+        <div class="inline-block mt-3 bg-indigo-200 text-indigo-600 dark:bg-indigo-100 rounded-full py-1 px-2 text-sm font-bold md:inline-block hover:bg-indigo-200">
+           @{{user.username}}
+        </div>
+
         <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
             <div>
                 <InputLabel for="name" value="Name" />

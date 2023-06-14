@@ -47,7 +47,13 @@ class User extends Authenticatable
     protected $appends = [
         'is_mentor',
         'is_mentee',
+        'avatar',
     ];
+
+    public function getRouteKeyName(): string
+    {
+        return 'username';
+    }
 
     public function mentor(): HasOne
     {
@@ -77,5 +83,25 @@ class User extends Authenticatable
     public function getIsMenteeAttribute()
     {
         return $this->mentee()->exists();
+    }
+
+    /**
+     * Get the URL to the user's profile photo.
+     */
+    public function getAvatarAttribute()
+    {
+        return $this->avatar_url ? $this->avatar_url : $this->defaultAvatarUrl();
+    }
+
+    /**
+     * Get the default profile photo URL if no profile photo has been uploaded.
+     */
+    protected function defaultAvatarUrl(): string
+    {
+        $name = trim(collect(explode(' ', $this->name))->map(function ($segment) {
+            return mb_substr($segment, 0, 1);
+        })->join(' '));
+
+        return 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&color=4f46e5&background=c7d2fe';
     }
 }
