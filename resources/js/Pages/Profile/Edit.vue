@@ -6,6 +6,7 @@ import UpdateProfileInformationForm from './Partials/UpdateProfileInformationFor
 import UpdateMentorInformationForm from './Partials/UpdateMentorInformationForm.vue';
 import UpdateTimezoneForm from './Partials/UpdateTimezoneForm.vue';
 import UpdateMentorStatusForm from './Partials/UpdateMentorStatusForm.vue';
+import UpdateAvatarForm from './Partials/UpdateAvatarForm.vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
@@ -43,6 +44,12 @@ defineProps({
 
                 <div v-if="user.is_mentor" class="p-4 sm:p-8 bg-indigo-50 dark:bg-indigo-950 shadow sm:rounded-lg">
                     <UpdateMentorInformationForm
+                        class="max-w-xl"
+                    />
+                </div>
+
+                <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                    <UpdateAvatarForm
                         class="max-w-xl"
                     />
                 </div>
