@@ -8,7 +8,8 @@ const props = defineProps({
   },
 })
 
-const image = 'https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80';
+const encodedName = encodeURI(props.mentor.user.name);
+const image = props.mentor.user.avatar_url ? props.mentor.user.avatar_url : `https://ui-avatars.com/api/?name=${encodedName}&color=4f46e5&background=c7d2fe`;
 
 </script>
 <template>
