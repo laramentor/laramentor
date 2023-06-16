@@ -7,6 +7,10 @@ import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
+import { MoonIcon, SunIcon, ComputerDesktopIcon } from '@heroicons/vue/24/outline';
+import { useColorMode } from '@vueuse/core';
+
+const { system, store } = useColorMode();
 
 const showingNavigationDropdown = ref(false);
 
@@ -42,8 +46,58 @@ const layoutuser = computed(() => page.props.auth.user)
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
-                            <!-- Settings Dropdown -->
+                            <!-- Dark mode toggle -->
                             <div class="ml-3 relative">
+                                <Dropdown align="right" width="36">
+                                    <template #trigger>
+                                        <span class="inline-flex rounded-md">
+                                            <button
+                                                type="button"
+                                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
+                                            >
+                                                <div class="h-8 flex items-center">
+                                                    <SunIcon v-if="store === 'light'" class="ml-2 h-5 w-5 text-indigo-400" />
+                                                    <MoonIcon v-if="store === 'dark'" class="ml-2 h-5 w-5 text-indigo-600" />
+                                                    <div v-if="store === 'auto'">
+                                                        <SunIcon v-if="system === 'light'" class="ml-2 h-5 w-5" />
+                                                        <MoonIcon v-if="system === 'dark'" class="ml-2 h-5 w-5" />
+                                                    </div>
+                                                </div>
+                                            </button>
+                                        </span>
+                                    </template>
+
+                                    <template #content>
+                                        <button
+                                            @click="store = 'light'"
+                                            class="flex w-full px-4 py-2 text-left text-sm leading-5 font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 transition duration-150 ease-in-out"
+                                            :class="store === 'light' ? 'text-indigo-600 dark:text-indigo-400' : ''"
+                                        >
+                                            <SunIcon class="mr-2 h-5 w-5" />
+                                            <span>Light</span>
+                                        </button>
+                                        <button
+                                            @click="store = 'dark'"
+                                            class="flex w-full px-4 py-2 text-left text-sm leading-5 font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 transition duration-150 ease-in-out"
+                                            :class="store === 'dark' ? 'text-indigo-600 dark:text-indigo-400' : ''"
+                                        >
+                                            <MoonIcon class="mr-2 h-5 w-5" />
+                                            <span>Dark</span>
+                                        </button>
+                                        <button
+                                            @click="store = 'auto'"
+                                            class="flex w-full px-4 py-2 text-left text-sm leading-5 font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 transition duration-150 ease-in-out"
+                                            :class="store === 'auto' ? 'text-indigo-600 dark:text-indigo-400' : ''"
+                                        >
+                                            <ComputerDesktopIcon class="mr-2 h-5 w-5" />
+                                            <span>System</span>
+                                        </button>
+                                    </template>
+                                </Dropdown>
+                            </div>
+
+                            <!-- Settings Dropdown -->
+                            <div class="relative">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">

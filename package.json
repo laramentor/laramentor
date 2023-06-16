@@ -21,6 +21,7 @@
         "@headlessui/vue": "^1.7.13",
         "@heroicons/vue": "^2.0.17",
         "@uploadcare/blocks": "0.22.12",
+        "@vueuse/core": "^10.1.2",
         "dayjs": "^1.11.7"
     }
 }
