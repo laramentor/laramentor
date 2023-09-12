@@ -126,7 +126,7 @@ const layoutuser = computed(() => page.props.auth.user)
                                     </template>
 
                                     <template #content>
-                                        <DropdownLink :href="route('profile.show', layoutuser)"> Profile </DropdownLink>
+                                        <DropdownLink :href="route('profile.edit')"> Edit Profile </DropdownLink>
                                         <DropdownLink :href="route('logout')" method="post" as="button">
                                             Log Out
                                         </DropdownLink>
@@ -189,7 +189,7 @@ const layoutuser = computed(() => page.props.auth.user)
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.show', layoutuser)"> Profile </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('profile.edit')"> Edit Profile </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button">
                                 Log Out
                             </ResponsiveNavLink>
