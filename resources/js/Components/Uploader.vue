@@ -2,7 +2,6 @@
 import "@uploadcare/blocks/web/lr-basic.min.css";
 import * as LR from "@uploadcare/blocks";
 import { PACKAGE_VERSION } from "@uploadcare/blocks/env";
-import { defineProps, defineEmits } from "vue";
 
 LR.registerBlocks(LR);
 

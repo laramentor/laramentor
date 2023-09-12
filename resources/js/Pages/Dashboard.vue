@@ -2,7 +2,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import MentorCards from '@/Components/MentorCards.vue';
 import { Head } from '@inertiajs/vue3';
-import { defineProps } from 'vue';
 
 const props = defineProps({
     mentors: {
