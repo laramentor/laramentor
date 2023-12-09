@@ -89,6 +89,12 @@ const submit = () => {
                     Log in
                 </PrimaryButton>
             </div>
+
+            <div class="flex items-center justify-end mt-4">
+                <a href="/social/github/redirect">
+                    Github
+                </a>
+            </div>
         </form>
     </GuestLayout>
 </template>
