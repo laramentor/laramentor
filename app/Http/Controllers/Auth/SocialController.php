@@ -4,41 +4,72 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
+use Inertia\Inertia;
 use Laravel\Socialite\Facades\Socialite;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class SocialController extends Controller
 {
     /**
      * Redirect the user to the provider authentication page.
      *
-     * @param string $provider
+     * @param string $driver
      * @return RedirectResponse
      */
-    public function redirect(string $provider): RedirectResponse
+    public function redirect(string $driver): RedirectResponse
     {
-        return Socialite::driver($provider)->redirect();
+        return Socialite::driver($driver)->redirect();
     }
 
     /**
      * Obtain the user information from the provider.
      *
-     * @param string $provider
-     * @return RedirectResponse
+     * @param string $driver
+     * @param Request $request
+     * @return Response
+     * @throws ValidationException
      */
-    public function callback(string $provider): RedirectResponse
+    public function callback(string $driver, Request $request): Response
     {
-        $socialUser = Socialite::driver($provider)->user();
+        $this->checkProvider($driver);
 
-        $user = User::updateOrCreate(['email' => $socialUser->email],
-            [
-                'name' => $socialUser->name
-            ]
-        );
+        try {
+            $user = Socialite::driver('github')->user();
+dd($user);
+        } catch (\Exception $e) {
+            dd($e);
+            return redirect()->route('login');
+        }
 
-        Auth::login($user);
 
-        return redirect('/dashboard');
+
+
+//        $redirect = $request->input('redirect');
+//        if ($redirect && Str::of($redirect)->startsWith($request->getSchemeAndHttpHost())) {
+//            Redirect::setIntendedUrl($redirect);
+//        }
+//
+//        if ($request->boolean('remember')) {
+//            $request->session()->put('login.remember', true);
+//        }
+//
+//        return Inertia::location(Socialite::driver($driver)->redirect());
+    }
+
+    /**
+     * Check if the driver is activated.
+     * @throws ValidationException
+     */
+    private function checkProvider(string $driver): void
+    {
+        if (! collect(config('auth.social.providers'))->contains($driver)) {
+            throw ValidationException::withMessages([
+                $driver => ['This provider does not exist.'],
+            ]);
+        }
     }
 }

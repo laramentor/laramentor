@@ -5,6 +5,10 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
+import Bitbucket from "@/Components/Icons/Bitbucket.vue";
+import Github from "@/Components/Icons/Github.vue";
+import Gitlab from "@/Components/Icons/Gitlab.vue";
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 defineProps({
@@ -26,6 +30,10 @@ const submit = () => {
     form.post(route('login'), {
         onFinish: () => form.reset('password'),
     });
+};
+
+const open = (provider) => {
+    window.location.href = route('social.redirect', { provider: provider });
 };
 </script>
 
@@ -90,10 +98,26 @@ const submit = () => {
                 </PrimaryButton>
             </div>
 
-            <div class="flex items-center justify-end mt-4">
-                <a href="/social/github/redirect">
-                    Github
-                </a>
+            <div class="flex items-center justify-end mt-4 mb-4">
+                <div class="mt-3 block">
+                    <p class="mb-3 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Login with:
+                    </p>
+                    <div class="flex flex-wrap">
+                        <SecondaryButton @click.prevent="open('github')" class="inline w-32 mr-1">
+                            <Github />
+                            <span class="align-middle ms-2">Github</span>
+                        </SecondaryButton>
+                        <SecondaryButton @click.prevent="open('gitlab')" class="inline w-32 mr-1">
+                            <Gitlab />
+                            <span class="align-middle ms-2">Gitlab</span>
+                        </SecondaryButton>
+                        <SecondaryButton @click.prevent="open('bitbucket')" class="inline w-32">
+                            <Bitbucket />
+                            <span class="align-middle ms-2">Bitbucket</span>
+                        </SecondaryButton>
+                    </div>
+                </div>
             </div>
         </form>
     </GuestLayout>
