@@ -12,7 +12,7 @@ use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class SocialController extends Controller
+class SocialiteController extends Controller
 {
     /**
      * Redirect the user to the provider authentication page.
@@ -38,15 +38,16 @@ class SocialController extends Controller
         $this->checkProvider($driver);
 
         try {
-            $user = Socialite::driver('github')->user();
+            $user = Socialite::driver($driver)->user();
 dd($user);
         } catch (\Exception $e) {
             dd($e);
             return redirect()->route('login');
         }
 
-
-
+// - check if user exists - email/username(nickname)
+// - if not create user
+// - send email to user to confirm email address
 
 //        $redirect = $request->input('redirect');
 //        if ($redirect && Str::of($redirect)->startsWith($request->getSchemeAndHttpHost())) {

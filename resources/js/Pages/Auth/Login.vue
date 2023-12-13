@@ -8,7 +8,7 @@ import TextInput from '@/Components/TextInput.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import Bitbucket from "@/Components/Icons/Bitbucket.vue";
 import Github from "@/Components/Icons/Github.vue";
-import Gitlab from "@/Components/Icons/Gitlab.vue";
+import Google from "@/Components/Icons/Google.vue";
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 defineProps({
@@ -108,9 +108,9 @@ const open = (provider) => {
                             <Github />
                             <span class="align-middle ms-2">Github</span>
                         </SecondaryButton>
-                        <SecondaryButton @click.prevent="open('gitlab')" class="inline w-32 mr-1">
-                            <Gitlab />
-                            <span class="align-middle ms-2">Gitlab</span>
+                        <SecondaryButton @click.prevent="open('google')" class="inline w-32 mr-1">
+                            <Google />
+                            <span class="align-middle ms-2">Google</span>
                         </SecondaryButton>
                         <SecondaryButton @click.prevent="open('bitbucket')" class="inline w-32">
                             <Bitbucket />
