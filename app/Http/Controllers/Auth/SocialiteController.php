@@ -33,18 +33,31 @@ class SocialiteController extends Controller
      * @return Response
      * @throws ValidationException
      */
-    public function callback(string $driver, Request $request): Response|RedirectResponse
+    public function callback(string $driver, Request $request): Response
     {
         $this->checkProvider($driver);
 
         try {
             $user = Socialite::driver($driver)->user();
+            dd($user);
         } catch (\Exception $e) {
-
-            return redirect()->route('login');
+            dd($e);
         }
 
-        return redirect()->route('home');
+// - check if user exists - email/username(nickname)
+// - if not create user
+// - send email to user to confirm email address
+
+//        $redirect = $request->input('redirect');
+//        if ($redirect && Str::of($redirect)->startsWith($request->getSchemeAndHttpHost())) {
+//            Redirect::setIntendedUrl($redirect);
+//        }
+//
+//        if ($request->boolean('remember')) {
+//            $request->session()->put('login.remember', true);
+//        }
+//
+//        return Inertia::location(Socialite::driver($driver)->redirect());
     }
 
     /**
