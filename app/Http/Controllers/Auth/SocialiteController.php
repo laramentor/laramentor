@@ -39,7 +39,8 @@ class SocialiteController extends Controller
         try {
             $socialite = Socialite::driver($driver)->user();
 
-            $user = User::with(['socialites' => fn ($query) => $query->provider($socialite, $driver)])
+            $user = User::query()
+                ->with(['socialite' => fn ($query) => $query->provider($socialite, $driver)])
                 ->where('email', $socialite->getEmail())
                 ->first();
         } catch (Exception $e) {
@@ -48,7 +49,7 @@ class SocialiteController extends Controller
             ]);
         }
 
-        if (! $user || $user->socialites->isEmpty()) {
+        if (! $user || ! $user->socialite) {
             session(['socialite' => $this->socialiteToArray($socialite, $driver)]);
 
             return Redirect::route('register');

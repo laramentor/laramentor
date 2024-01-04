@@ -111,8 +111,8 @@ class User extends Authenticatable implements MustVerifyEmail
         return 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&color=4f46e5&background=c7d2fe';
     }
 
-    public function socialites(): HasMany
+    public function socialite(): HasOne
     {
-        return $this->hasMany(Socialite::class);
+        return $this->hasOne(Socialite::class);
     }
 }

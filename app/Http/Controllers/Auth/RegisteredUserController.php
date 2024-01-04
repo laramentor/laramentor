@@ -52,7 +52,7 @@ class RegisteredUserController extends Controller
         ]);
 
         if ($socialite = session()->pull('socialite')) {
-            $user->socialites()->create($socialite);
+            $user->socialite()->create($socialite);
         }
 
         $user->mentee()->save(new Mentee);
