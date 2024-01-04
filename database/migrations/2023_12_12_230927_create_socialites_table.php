@@ -12,13 +12,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('socialite_users', function (Blueprint $table) {
+        Schema::create('socialites', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->string('nickname');
-            $table->string('email');
+            $table->string('provider_id')->unique();
             $table->enum('provider', SocialProvider::values());
+            $table->string('nickname')->nullable();
             $table->string('name')->nullable();
+            $table->string('email');
             $table->string('avatar')->nullable();
             $table->json('data')->nullable();
             $table->boolean('verified')->default(false);
@@ -31,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('socialite_users');
+        Schema::dropIfExists('socialites');
     }
 };

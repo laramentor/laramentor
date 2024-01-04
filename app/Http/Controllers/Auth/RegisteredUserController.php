@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mentee;
+use App\Models\Socialite;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -22,7 +23,9 @@ class RegisteredUserController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('Auth/Register');
+        return Inertia::render('Auth/Register', [
+            'socialite' => session()->get('socialite') ?? [],
+        ]);
     }
 
     /**
@@ -47,6 +50,10 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'timezone' => $request->timezone,
         ]);
+
+        if ($socialite = session()->pull('socialite')) {
+            $user->socialites()->create($socialite);
+        }
 
         $user->mentee()->save(new Mentee);
 

@@ -2,26 +2,19 @@
 
 namespace App\Services;
 
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Str;
-use Illuminate\Auth\Events\{
-    Lockout,
-    Login
-};
-
-use Illuminate\Support\Facades\{
-    Request,
-    Auth,
-    RateLimiter
-};
-
 use App\Models\User;
+use Illuminate\Auth\Events\Lockout;
+use Illuminate\Auth\Events\Login;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Class AuthService
- * @package App\Services
  */
 class AuthService
 {
@@ -30,49 +23,40 @@ class AuthService
     ) {
     }
 
-    /**
-     * @var int
-     */
     protected int $maxAttempts = 5;
 
     /**
      * Auth validation rules for login
      */
-    public static function rules() : array
+    public static function rules(): array
     {
         return [
-            'email'    => 'required|email',
+            'email' => 'required|email',
             'password' => 'required|string',
-            'remember' => 'nullable|boolean'
+            'remember' => 'nullable|boolean',
         ];
     }
 
     /**
      * Perform authentication
      *
-     * @param string $email
-     * @param string $password
-     * @param bool $remember
-     * @param string $guard
-     * @return Authenticatable
      * @throws ValidationException
      */
     public function authenticate(
         string $email,
         string $password,
-        bool $remember=false,
-        string $guard='web'
-    ) : Authenticatable {
+        bool $remember = false,
+        string $guard = 'web'
+    ): Authenticatable {
 
         $this->ensureIsNotRateLimited($email);
 
         $credentials = [
-            'email'    => $email,
+            'email' => $email,
             'password' => $password,
         ];
 
-        if (! $this->auth->guard($guard)->attempt($credentials, $remember))
-        {
+        if (! $this->auth->guard($guard)->attempt($credentials, $remember)) {
             RateLimiter::hit($this->throttleKey($email));
 
             throw ValidationException::withMessages([
@@ -87,16 +71,17 @@ class AuthService
 
     /**
      * Ensure the login request is not rate limited.
+     *
      * @throws ValidationException
      */
-    public function ensureIsNotRateLimited(string $email) : void
+    public function ensureIsNotRateLimited(string $email): void
     {
         $rateLimited = RateLimiter::tooManyAttempts(
             $this->throttleKey($email),
             $this->maxAttempts
         );
 
-        if (!$rateLimited) {
+        if (! $rateLimited) {
             return;
         }
 
@@ -116,8 +101,6 @@ class AuthService
 
     /**
      * Get the rate limiting throttle key for the request.
-     * @param string $email
-     * @return string
      */
     public function throttleKey(string $email): string
     {
@@ -131,23 +114,21 @@ class AuthService
      */
     public function loginUser(
         User $user,
-        bool $remember=false,
-        string $guard='web'
+        bool $remember = false,
+        string $guard = 'web'
     ): User {
         event(new Login($guard, $user, $remember));
         $this->auth->guard($guard)->login($user);
+
         return $user;
     }
 
     /**
      * Logout an authenticated user
-     *
-     * @param string $guard
-     * @return bool
      */
-    public function logout(string $guard='web') : bool
+    public function logout(string $guard = 'web'): bool
     {
-        if(!$this->auth->guard($guard)->check()) {
+        if (! $this->auth->guard($guard)->check()) {
             return false;
         }
 
@@ -162,17 +143,13 @@ class AuthService
     /**
      * Perform login authentication
      *
-     * @param string $email
-     * @param string $password
-     * @param bool $remember
-     * @return Authenticatable
      * @throws ValidationException
      */
     public function emailLogin(
         string $email,
         string $password,
-        bool $remember=false
-    ) : Authenticatable {
+        bool $remember = false
+    ): Authenticatable {
 
         $user = $this->authenticate($email, $password, $remember);
         session()->regenerate();
@@ -182,11 +159,8 @@ class AuthService
 
     /**
      * Destroy an authenticated session.
-     *
-     * @param string $guard
-     * @return bool
      */
-    public function destroy(string $guard='web') : bool
+    public function destroy(string $guard = 'web'): bool
     {
         $this->auth->guard($guard)->logout();
 

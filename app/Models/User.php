@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -12,9 +13,11 @@ use Laravel\Sanctum\HasApiTokens;
 /**
  * @method static updateOrCreate(array $array, array $array1)
  */
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -106,5 +109,10 @@ class User extends Authenticatable
         })->join(' '));
 
         return 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&color=4f46e5&background=c7d2fe';
+    }
+
+    public function socialites(): HasMany
+    {
+        return $this->hasMany(Socialite::class);
     }
 }
