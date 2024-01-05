@@ -14,6 +14,7 @@ use Illuminate\Validation\ValidationException;
 use Laravel\Socialite\Contracts\User as SocialiteUser;
 use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpFoundation\Response;
+use App\Enums\SocialProvider;
 
 class SocialiteController extends Controller
 {
@@ -69,7 +70,7 @@ class SocialiteController extends Controller
      */
     private function checkProvider(string $driver): void
     {
-        if (! collect(config('auth.social.providers'))->contains($driver)) {
+        if (! collect(SocialProvider::values())->contains($driver)) {
             throw ValidationException::withMessages([
                 'error' => ['This provider does not exist.'],
             ]);

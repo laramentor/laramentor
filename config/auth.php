@@ -112,7 +112,4 @@ return [
 
     'password_timeout' => 10800,
 
-    'social' => [
-        'providers' => ['github', 'google', 'bitbucket'],
-    ],
 ];
