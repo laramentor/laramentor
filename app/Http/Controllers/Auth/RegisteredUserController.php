@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Events\SocialiteRegistered;
 
 class RegisteredUserController extends Controller
 {
@@ -51,8 +52,9 @@ class RegisteredUserController extends Controller
             'timezone' => $request->timezone,
         ]);
 
-        if ($socialite = session()->pull('socialite')) {
-            $user->socialite()->create($socialite);
+        if ($data = session()->pull('socialite')) {
+            $socialite = $user->socialite()->create($data);
+            event(new SocialiteRegistered($user, $socialite));
         }
 
         $user->mentee()->save(new Mentee);

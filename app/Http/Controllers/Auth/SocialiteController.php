@@ -38,11 +38,11 @@ class SocialiteController extends Controller
 
         try {
             $socialite = Socialite::driver($driver)->user();
-
-            $user = User::query()
-                ->with(['socialite' => fn ($query) => $query->provider($socialite, $driver)])
-                ->where('email', $socialite->getEmail())
-                ->first();
+            $user = User::findSocialite(
+                $driver,
+                $socialite->getId(),
+                $socialite->getEmail()
+            )->first();
         } catch (Exception $e) {
             return redirect()->route('login')->withErrors([
                 'email' => 'Unable to login with ' . $driver . '.',

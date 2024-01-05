@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -12,6 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 /**
  * @method static updateOrCreate(array $array, array $array1)
+ * @method static findSocialite(string $driver, string $getId, string|null $getEmail)
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -114,5 +115,19 @@ class User extends Authenticatable implements MustVerifyEmail
     public function socialite(): HasOne
     {
         return $this->hasOne(Socialite::class);
+    }
+
+    public function scopeFindSocialite(
+        Builder $query,
+        string $provider,
+        string $provider_id,
+        string $email
+    ): Builder {
+        return $query
+            ->whereHas(
+                'socialite',
+                fn ($query) => $query->findUnique($provider, $provider_id, $email)
+            )
+            ->where('email', $email);
     }
 }

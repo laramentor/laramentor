@@ -14,14 +14,13 @@ return new class extends Migration
     {
         Schema::create('socialites', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->index()->unique();
             $table->string('provider_id')->unique();
+            $table->string('email')->unique();
             $table->enum('provider', SocialProvider::values());
             $table->string('nickname')->nullable();
             $table->string('name')->nullable();
-            $table->string('email');
             $table->string('avatar')->nullable();
-            $table->json('data')->nullable();
             $table->boolean('verified')->default(false);
             $table->timestamps();
         });
