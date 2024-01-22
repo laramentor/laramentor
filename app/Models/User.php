@@ -2,16 +2,23 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+/**
+ * @method static updateOrCreate(array $array, array $array1)
+ * @method static findSocialite(string $driver, string $getId, string|null $getEmail)
+ */
+class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -103,5 +110,24 @@ class User extends Authenticatable
         })->join(' '));
 
         return 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&color=4f46e5&background=c7d2fe';
+    }
+
+    public function socialite(): HasOne
+    {
+        return $this->hasOne(Socialite::class);
+    }
+
+    public function scopeFindSocialite(
+        Builder $query,
+        string $provider,
+        string $provider_id,
+        string $email
+    ): Builder {
+        return $query
+            ->whereHas(
+                'socialite',
+                fn ($query) => $query->findUnique($provider, $provider_id, $email)
+            )
+            ->where('email', $email);
     }
 }

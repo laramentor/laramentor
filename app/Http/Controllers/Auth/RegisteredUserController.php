@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mentee;
+use App\Models\Socialite;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -12,8 +13,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Events\SocialiteRegistered;
 
 class RegisteredUserController extends Controller
 {
@@ -22,13 +25,15 @@ class RegisteredUserController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('Auth/Register');
+        return Inertia::render('Auth/Register', [
+            'socialite' => session('socialite') ?? [],
+        ]);
     }
 
     /**
      * Handle an incoming registration request.
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function store(Request $request): RedirectResponse
     {
@@ -47,6 +52,11 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'timezone' => $request->timezone,
         ]);
+
+        if ($data = session()->pull('socialite')) {
+            $socialite = $user->socialite()->create($data);
+            event(new SocialiteRegistered($user, $socialite));
+        }
 
         $user->mentee()->save(new Mentee);
 

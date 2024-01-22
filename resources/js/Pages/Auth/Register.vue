@@ -7,7 +7,11 @@ import TextInput from '@/Components/TextInput.vue';
 import TextAddOnInput from '@/Components/TextAddOnInput.vue';
 import TimezoneInput from '@/Components/TimezoneInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { watch } from 'vue';
+import {onMounted, watch} from 'vue';
+
+const props = defineProps({
+    socialite: Object,
+});
 
 const form = useForm({
     name: '',
@@ -27,7 +31,23 @@ const submit = () => {
 
 // when the name field changes, update the username field
 watch(() => form.name, (value) => {
-    form.username = value.toLowerCase().replace(/\s+/g, '');
+
+    if (form.username) {
+        return;
+    }
+
+    form.username = value ? value.toLowerCase().replace(/\s+/g, '') : '';
+});
+
+onMounted(() => {
+    if (props.socialite.email) {
+        const password = Math.random().toString(36).slice(-16);
+        form.name = props.socialite.name;
+        form.email = props.socialite.email;
+        form.username = props.socialite.nickname;
+        form.password = password;
+        form.password_confirmation = password;
+    }
 });
 
 </script>
@@ -84,7 +104,7 @@ watch(() => form.name, (value) => {
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
-            <div class="mt-4">
+            <div class="mt-4" v-if="!socialite.email">
                 <InputLabel for="password" value="Password" />
 
                 <TextInput
@@ -99,7 +119,7 @@ watch(() => form.name, (value) => {
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
-            <div class="mt-4">
+            <div class="mt-4" v-if="!socialite.email">
                 <InputLabel for="password_confirmation" value="Confirm Password" />
 
                 <TextInput

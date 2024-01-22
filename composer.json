@@ -10,6 +10,7 @@
         "inertiajs/inertia-laravel": "^0.6.8",
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.2",
+        "laravel/socialite": "^5.10",
         "laravel/tinker": "^2.8",
         "spatie/laravel-google-calendar": "^3.6",
         "tightenco/ziggy": "^1.0"
